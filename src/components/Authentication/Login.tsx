@@ -1,9 +1,10 @@
-import React, { Component ,useState} from 'react';
+import React, { Component ,useState,useEffect} from 'react';
 import { Text, View, Image,TextInput,TouchableOpacity,ScrollView,TouchableWithoutFeedback ,Keyboard} from 'react-native';
 import AppStyle from "../../themes/index";
 import imageHeader from "../../assets/images/logoHeader.png";
 import { AntDesign,Ionicons,FontAwesome } from '@expo/vector-icons'; 
 import { useFonts } from "expo-font";
+import {getLanguage} from "../../services/api";
 
 interface Props {}
 
@@ -11,12 +12,19 @@ interface State {
     text:string;
 }
 
-const Login:React.FC = () =>{
+const Login =  () =>{
     const [showPassword, setshowPassword] = useState(true);
     const [password,setpassword]=useState("");
     const buttonHandler = () => {
         setshowPassword(current => !current)
     }
+    const getDataLanguage = async () => {
+        const result = await getLanguage();
+        console.log(result);
+    } 
+    useEffect( () => {
+        getDataLanguage();
+     }, [])
     const [loaded] = useFonts({
         RobotoMonoInput: require("../../assets/fonts/RobotoMono-Regular.ttf"),
         RobotoTitle: require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -26,6 +34,11 @@ const Login:React.FC = () =>{
     if (!loaded) {
         return null;
     }
+    const a = async () =>{
+        console.log("nfuyen")
+        
+    }
+
     return(
         <TouchableWithoutFeedback
         style={AppStyle.StyleCommon.container}
@@ -73,17 +86,17 @@ const Login:React.FC = () =>{
             </View>
             </View>
             <Text style ={[AppStyle.StyleLogin.viewTextFoget,{ fontFamily: "RobotoMonoInput" }]}>Forgot Password</Text>      
-            <View style ={AppStyle.StyleLogin.buttonSignIn}>
+            <TouchableOpacity onPress={a} style ={AppStyle.StyleLogin.buttonSignIn}>
                 <Text style ={[AppStyle.StyleLogin.viewTextButtonSignIn,{ fontFamily: "RobotoMonoInput" }]} >SIGN IN</Text>
-            </View>       
+            </TouchableOpacity>       
             <Text style ={[AppStyle.StyleLogin.viewTextChooseSignIn,{ fontFamily: "RobotoMonoInput" }]}>-Or sign in with-</Text>
             <View style ={AppStyle.StyleLogin.viewChooseSignInButton}>
-                <View style ={AppStyle.StyleLogin.viewChooseSignInButtonFacebook}>
+                <TouchableOpacity style ={AppStyle.StyleLogin.viewChooseSignInButtonFacebook}>
                     <FontAwesome name="facebook-f" size={24} color="#ffff" />
-                </View>
-                <View style ={AppStyle.StyleLogin.viewChooseSignInButtonGoogle}>
+                </TouchableOpacity>
+                <TouchableOpacity style ={AppStyle.StyleLogin.viewChooseSignInButtonGoogle}>
                     <AntDesign name="google" size={24} color="#ffff" />
-                </View>
+                </TouchableOpacity>
             </View>
             <View style={AppStyle.StyleLogin.viewNote}>
                 <Text style={{ fontSize: 12,fontFamily: "RobotoMonoCheck" }}>Don’t have an account ? </Text>
