@@ -6,7 +6,6 @@ import {
 const StyleCommon = StyleSheet.create({
     container: {
         flex:1,
-        alignItems:'center',
         backgroundColor:"#ffff"
     }
 });

@@ -13,7 +13,7 @@ interface State {
 
 const Login:React.FC = () =>{
     return(
-        <View style={AppStyle.StyleCommon.container}>          
+        <View style={[AppStyle.StyleCommon.container,{alignItems:'center'}]}>          
             <View style={AppStyle.StyleLogin.circle1}></View>
             <View style={AppStyle.StyleLogin.circle2}></View>
             <View style ={AppStyle.StyleLogin.viewTitle}>
