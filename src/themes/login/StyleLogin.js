@@ -120,7 +120,7 @@ const StyleCommon = StyleSheet.create({
         height:height*0.20,
         width:"100%",
         justifyContent:'center',
-        marginTop:30
+        marginTop:50
     },
     textInputLogin:{
         fontWeight:"500",
