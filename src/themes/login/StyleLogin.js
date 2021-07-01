@@ -28,19 +28,17 @@ const StyleCommon = StyleSheet.create({
         borderRadius:100
     },
     viewTitle:{
-       
         alignItems:'center',
         flexDirection:"column",
-        height:height*0.2,
         width:"100%",
-        justifyContent:'center'
-        
+        justifyContent:'center',
+        height:height*0.18,
+        marginTop:40
     },
     titleSignIn:{
        fontWeight:"700",
        fontSize:36, 
-       color:"#000000"
-            
+       color:"#000000"       
     },
     titleDetail:{
         fontWeight:"500",
@@ -48,36 +46,19 @@ const StyleCommon = StyleSheet.create({
     },
     viewImage:{
         alignItems:'center',
-        height:height*0.25,
         width:"100%",
         justifyContent:'center',
-        
     },
     imageHeader:{
-        height:300,
-        width:350,
-       borderRadius:30
-    },
-   
-    viewForgot:{
-        alignItems:'center',
-        height:height*0.01,
-        width:"100%",
-        justifyContent:'center',
-        
+        height:230,
+        width:"75%",
+        borderRadius:30
     },
     viewTextFoget:{
         color:"#5EA3A3",
         fontWeight:"500",
         fontSize:14,
-
-    },
-    viewButton:{
-        alignItems:'center',
-        height:height*0.1,
-        width:"100%",
-        justifyContent:'center',
-        marginTop:15
+        marginBottom:20
     },
     buttonSignIn:{
         width:256,
@@ -85,7 +66,8 @@ const StyleCommon = StyleSheet.create({
         backgroundColor:"#2D7474",
         alignItems:'center',
         justifyContent:"center",
-        borderRadius:12
+        borderRadius:12,
+        marginBottom:20
     },
     viewTextButtonSignIn:{
         fontWeight:"500",
@@ -117,10 +99,9 @@ const StyleCommon = StyleSheet.create({
     },
     viewLoginInput:{
         alignItems:'center',
-        height:height*0.20,
         width:"100%",
         justifyContent:'center',
-        marginTop:50
+        marginTop:10
     },
     textInputLogin:{
         fontWeight:"500",
@@ -130,21 +111,22 @@ const StyleCommon = StyleSheet.create({
     viewTextChooseSignIn:{
         color:"#000000",
         fontWeight:'400',
-        fontSize:12
+        fontSize:12,
+        marginBottom:20
     },
     viewChooseSignIn:{
         alignItems:'center',
         width:"100%",
         justifyContent:'center',
-        marginTop:15,
+       
        
     },
     viewChooseSignInButton:{
         flexDirection:"row",
         justifyContent:"space-around",
         width:"70%",
-        height:height*0.1,
-        marginTop:40
+        marginBottom:20
+       
     },
     viewChooseSignInButtonFacebook:{
         width: 105,
@@ -166,8 +148,8 @@ const StyleCommon = StyleSheet.create({
     viewNote:{
         flexDirection:'row',
         justifyContent:'center',
-        marginBottom:30 ,
-        height:height*0.2,
-    }
+        marginTop:15
+    },
+   
 });
 export default StyleCommon;
