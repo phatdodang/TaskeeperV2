@@ -7,7 +7,7 @@ const StyleCommon = StyleSheet.create({
     container: {
         flex:1,
         alignItems:'center',
-        justifyContent:'center'
+        backgroundColor:"#ffff"
     }
 });
 export default StyleCommon;
