@@ -33,9 +33,10 @@ const Login:React.FC = () =>{
                 style={AppStyle.StyleLogin.input}
                 underlineColorAndroid="transparent"
                 multiline={true}
+                placeholder="Enter email"
                 ></TextInput>
                 <View style={AppStyle.StyleLogin.viewTextInput}>
-                <Text style={AppStyle.StyleLogin.textInputLogin}>Full Name</Text>
+                <Text style={AppStyle.StyleLogin.textInputLogin}>Email</Text>
                 </View>
             </View>
 
@@ -44,9 +45,10 @@ const Login:React.FC = () =>{
                 style={AppStyle.StyleLogin.input}
                 underlineColorAndroid="transparent"
                 multiline={true}
+                placeholder="Enter password"
                 ></TextInput>
                 <View style={AppStyle.StyleLogin.viewTextInput}>
-                <Text style={AppStyle.StyleLogin.textInputLogin}>Email</Text>
+                <Text style={AppStyle.StyleLogin.textInputLogin}>Password</Text>
                 </View>
             </View>
             </View>
@@ -72,7 +74,7 @@ const Login:React.FC = () =>{
             </View>
             <View style={AppStyle.StyleLogin.viewNote}>
                 <Text style={{ fontSize: 12 }}>Don’t have an account ? </Text>
-                <Text style={{ fontSize: 12, color: "red" }}>Sign in </Text>
+                <Text style={{ fontSize: 12, color: "red" }}>Sign up </Text>
             </View>
         </View>
     )
