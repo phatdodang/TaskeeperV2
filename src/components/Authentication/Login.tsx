@@ -8,19 +8,23 @@ import {getLanguage} from "../../services/api";
 
 interface Props {}
 
-interface State {
-    text:string;
+interface Language {
+    codeDescription: string,
+    codeId: number,
+    codeValue:string
 }
 
 const Login =  () =>{
     const [showPassword, setshowPassword] = useState(true);
     const [password,setpassword]=useState("");
+    const [language, setLanguage] = useState<Language[]>();
     const buttonHandler = () => {
         setshowPassword(current => !current)
     }
     const getDataLanguage = async () => {
         const result = await getLanguage();
-        console.log(result);
+        await setLanguage(result)
+        console.log(language);
     } 
     useEffect( () => {
         getDataLanguage();
