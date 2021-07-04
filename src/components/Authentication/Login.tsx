@@ -1,10 +1,14 @@
 import React, { Component ,useState,useEffect} from 'react';
 import { Text, View, Image,TextInput,TouchableOpacity,ScrollView,TouchableWithoutFeedback ,Keyboard} from 'react-native';
 import AppStyle from "../../themes/index";
+//@ts-ignore
 import imageHeader from "../../assets/images/logoHeader.png";
 import { AntDesign,Ionicons,FontAwesome } from '@expo/vector-icons'; 
 import { useFonts } from "expo-font";
 import {getLanguage} from "../../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import * as action from '../../redux/actions/index'
+import {signInInterface} from '../../redux/actions/Authentication/signIn.actionType'
 
 interface Props {}
 
@@ -14,17 +18,26 @@ interface Language {
     codeValue:string
 }
 
+let data:signInInterface = {
+    loginString: "taipham@gmail.com",
+    loginInformation: {
+        password: "taaaasddd",
+        googleToken: "EAAADD.sdfsdf",
+        facebookToken: "ESDSDDS.GGSSD.SDSDSD"
+    }
+}
 const Login =  () =>{
     const [showPassword, setshowPassword] = useState(true);
     const [password,setpassword]=useState("");
-    const [language, setLanguage] = useState<Language[]>();
+    const [language, setLanguage] = useState<Language[]>([]);
+    const dispatch = useDispatch();
     const buttonHandler = () => {
         setshowPassword(current => !current)
     }
     const getDataLanguage = async () => {
         const result = await getLanguage();
         await setLanguage(result)
-        console.log(language);
+        
     } 
     useEffect( () => {
         getDataLanguage();
@@ -38,9 +51,8 @@ const Login =  () =>{
     if (!loaded) {
         return null;
     }
-    const a = async () =>{
-        console.log("nfuyen")
-        
+    const onSubmit = async () =>{
+       dispatch(action.signIn(data))
     }
 
     return(
@@ -90,7 +102,7 @@ const Login =  () =>{
             </View>
             </View>
             <Text style ={[AppStyle.StyleLogin.viewTextFoget,{ fontFamily: "RobotoMonoInput" }]}>Forgot Password</Text>      
-            <TouchableOpacity onPress={a} style ={AppStyle.StyleLogin.buttonSignIn}>
+            <TouchableOpacity onPress={onSubmit} style ={AppStyle.StyleLogin.buttonSignIn}>
                 <Text style ={[AppStyle.StyleLogin.viewTextButtonSignIn,{ fontFamily: "RobotoMonoInput" }]} >SIGN IN</Text>
             </TouchableOpacity>       
             <Text style ={[AppStyle.StyleLogin.viewTextChooseSignIn,{ fontFamily: "RobotoMonoInput" }]}>-Or sign in with-</Text>
