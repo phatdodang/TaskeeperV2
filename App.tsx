@@ -5,22 +5,23 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 const sagaMiddleware = createSagaMiddleware();
-import reducers from "./src/redux/reducers/index.js";
-import mySaga from "./src/redux/sagas/index.js";
+import reducers from "./src/redux/reducers/index";
+
 import Login from "./src/components/Authentication/Login";
 import {Register} from "./src/components/Authentication/Register";
 import LandingPage from "./src/components/Authentication/LandingPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import mySaga from "./src/redux/sagas/index";
 
-// const store = createStore(reducers,applyMiddleware(sagaMiddleware));
+const store = createStore(reducers,applyMiddleware(sagaMiddleware));
 
-// sagaMiddleware.run(mySaga);
+sagaMiddleware.run(mySaga);
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    //<Provider store={store}>
+    <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -40,7 +41,7 @@ export default function App() {
           /> 
         </Stack.Navigator>
       </NavigationContainer>
-    //</Provider>
+    </Provider>
   );
 }
 
