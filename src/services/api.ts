@@ -17,7 +17,6 @@ export const getLanguage = async () => {
 }
 
 export const loginUser = (payload:signInInterface) => {
-    console.log(payload)
     return  axios.post(`${URL}/auth/login`,payload);
 };
 export const getLaco = () => {

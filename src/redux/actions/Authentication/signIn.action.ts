@@ -1,12 +1,17 @@
-import {ActionSignInConstants} from '../../constants/index'
-import {signInInterface,SigIn} from "./signIn.actionType"
+import { ActionSignInConstants } from '../../constants/index'
+import { signInInterface, SigIn, signInSuccessInterface, SigInSuccess } from "./signIn.actionType"
 
 
 
-export function signIn(payload:signInInterface):SigIn{
-    return{
-        type:ActionSignInConstants.SIGN_IN,
-        payload:payload
+export function signIn(payload: signInInterface): SigIn {
+    return {
+        type: ActionSignInConstants.SIGN_IN,
+        payload: payload
     }
-  };
-export type State = ReturnType<typeof signIn>;
+};
+export function signInSuccess(payload: signInSuccessInterface): SigInSuccess {
+    return {
+        type: ActionSignInConstants.SIGN_IN_SUCCESS,
+        payload: payload
+    }
+};
