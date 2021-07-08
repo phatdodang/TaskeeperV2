@@ -24,11 +24,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             name="LandingPage"
             component={LandingPage}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="Login"
             component={Login}
