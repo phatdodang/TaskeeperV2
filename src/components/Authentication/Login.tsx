@@ -16,9 +16,9 @@ interface Props {}
 
 const Login =  () =>{
     const [showPassword, setshowPassword] = useState(true);
-    const result = useSelector((state) => state.signInReducer.SigInSuccess);
     const [loginString,setLoginString]=useState("");
     const [password,setpassword]=useState("");
+    const result = useSelector((state:any) => state.signInReducer.SigInSuccess);
     const dispatch = useDispatch();
     const buttonHandler = () => {
         setshowPassword(current => !current)
