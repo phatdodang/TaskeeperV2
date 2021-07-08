@@ -8,7 +8,7 @@ export interface loginInformationInterface {
 }
 
 export interface signInInterface {
-    loginString: string;
+    loginString: string,
     loginInformation: loginInformationInterface
 }
 
