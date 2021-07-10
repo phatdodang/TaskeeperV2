@@ -20,6 +20,7 @@ export const Register = () => {
   const [isSelected, setSelection] = useState(false);
   const [showPassword, setshowPassword] = useState(true);
   const [password,setpassword]=useState("");
+  
   const buttonHandler = () => {
     setshowPassword(current => !current)
   }
