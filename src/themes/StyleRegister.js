@@ -48,8 +48,8 @@ const StyleRegister = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
-    marginTop: 230,
     marginBottom: 30,
+    marginTop:15
   },
   input: {
     borderWidth: 1,
@@ -60,6 +60,17 @@ const StyleRegister = StyleSheet.create({
     borderColor: "black",
     paddingLeft: 15,
     paddingRight: 5,
+  },
+  viewBarPasswordStrengthDisplay:{
+    width:(width*8)/10,
+    alignItems:'center',
+    marginTop:5,
+    marginBottom: 10,
+  },
+  viewValidation:{
+    width:(width*8)/10,
+    marginTop:5,
+    marginLeft:15
   },
   viewInput: {
     width: width,
@@ -115,5 +126,21 @@ const StyleRegister = StyleSheet.create({
     fontSize: 16,
     marginTop: 7,
   },
+  viewFlatList: {
+    width: "20%",
+    position: "absolute",
+    top: 40,
+    height: 100,
+    backgroundColor: "white",
+    zIndex: 2,
+    borderTopWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    justifyContent: "center",
+  },
+  textShowPhoneCode:{
+    fontSize: 15, 
+    marginTop: 8
+  }
 });
 export default StyleRegister;
