@@ -53,15 +53,16 @@ const Login = () => {
   if (!loaded) {
     return null;
   }
-  const onSubmit = async (values) => {
+  const onSubmit = async (values:any) => {
     let data: signInInterface = {
       loginString: values.email,
       loginInformation: {
-        password: values.password,
+        password: "dodangphat26@",
         googleToken: "",
         facebookToken: "",
       },
     };
+    console.log(data)
     dispatch(action.signIn(data));
   };
 
