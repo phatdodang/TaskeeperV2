@@ -6,8 +6,8 @@ import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 const sagaMiddleware = createSagaMiddleware();
 import reducers from "./src/redux/reducers/index";
-
 import Login from "./src/components/Authentication/Login";
+import Verifycation from "./src/components/Authentication/Verifycation";
 import {Register} from "./src/components/Authentication/Register";
 import LandingPage from "./src/components/Authentication/LandingPage";
 import { NavigationContainer } from "@react-navigation/native";
@@ -24,6 +24,11 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+        <Stack.Screen
+            name="Verifycation"
+            component={Verifycation}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="LandingPage"
             component={LandingPage}
