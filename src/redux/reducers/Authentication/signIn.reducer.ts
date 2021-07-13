@@ -17,7 +17,7 @@ const initialSigInSuccess: signInSuccessInterface = {
   }
 }
 const initialSigInError: signInErrorInterface = {
-  status: '',
+  status: 0,
   message: ''
 }
 interface allSignInterface {
@@ -43,6 +43,13 @@ const signInReducer = (state: allSignInterface = initial, action: Action) => {
       return {
         ...state,
         SigInSuccess: action.payload
+      }
+    }
+    case ActionSignInConstants.SIGN_IN_FAIL: {
+
+      return {
+        ...state,
+        SigInError: action.payload
       }
     }
     default: return state;

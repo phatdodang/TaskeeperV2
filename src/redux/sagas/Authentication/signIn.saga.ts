@@ -4,7 +4,7 @@ import { SigIn } from '../../actions/index'
 
 import { loginUser } from '../../../services/api'
 
-import { signInSuccess, } from '../../actions/Authentication/signIn.action';
+import { signInSuccess, signInError } from '../../actions/Authentication/signIn.action';
 
 
 
@@ -18,7 +18,12 @@ export function* loginUsersRequest(action: SigIn) {
             return;
         }
     } catch (errors) {
-        yield console.log(`Error --> ${JSON.stringify(errors)}`)
+        const result = {
+            status: 400,
+            message: "Email or password incorrect"
+
+        }
+        yield put(signInError(result));
     }
 }
 

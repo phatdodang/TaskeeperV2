@@ -19,7 +19,7 @@ import ENTEXT from "../../locales/en";
 import { useDispatch, useSelector } from "react-redux";
 import * as action from "../../redux/actions/index";
 import { signInInterface } from "../../redux/actions/Authentication/signIn.actionType";
-import { setItem, getItem } from "../../storage/index";
+import { setItem, } from "../../storage/index";
 import { APP_CONSTANTS } from "../../constansts/index";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -33,17 +33,20 @@ let initialValues = {
 
 const Login = () => {
   const [showPassword, setshowPassword] = useState(true);
-  const result = useSelector((state: any) => state.signInReducer.SigInSuccess);
+  const loginSuccess = useSelector((state: any) => state.signInReducer.SigInSuccess);
+  const loginError = useSelector((state: any) => state.signInReducer.SigInError);
   const dispatch = useDispatch();
   const buttonHandler = () => {
     setshowPassword((current) => !current);
   };
   useEffect(() => {
-    if (result.data.access_token != "") {
-      setItem(APP_CONSTANTS.TOKEN, result.data.access_token);
-      console.log("Đăng nhập thành công");
+    if (loginSuccess.data.access_token != "") {
+      setItem(APP_CONSTANTS.TOKEN, loginSuccess.data.access_token);
+      console.log("Login successfully");
+    }else if(loginError.status != 0){
+       console.log(loginError.message);
     }
-  }, [result]);
+  }, [loginSuccess,loginError]);
   const [loaded] = useFonts({
     RobotoMonoInput: require("../../assets/fonts/RobotoMono-Regular.ttf"),
     RobotoTitle: require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -62,7 +65,6 @@ const Login = () => {
         facebookToken: "",
       },
     };
-    console.log(data)
     dispatch(action.signIn(data));
   };
 
