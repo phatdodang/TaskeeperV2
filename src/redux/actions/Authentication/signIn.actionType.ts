@@ -29,7 +29,7 @@ export interface signInSuccessInterface {
     data: tokenSignIn
 }
 export interface signInErrorInterface {
-    status: String;
+    status: Number;
     message: String
 }
 export interface SigIn {
