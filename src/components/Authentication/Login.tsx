@@ -60,7 +60,7 @@ const Login = () => {
     let data: signInInterface = {
       loginString: values.email,
       loginInformation: {
-        password: "dodangphat26@",
+        password:values.password,
         googleToken: "",
         facebookToken: "",
       },
@@ -255,7 +255,6 @@ const loginValidationSchema = yup.object().shape({
   password: yup
     .string()
     .matches(/\w*[a-z]\w*/, "Password must have a small letter")
-    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
     .matches(/\d/, "Password must have a number")
     .matches(
       /[!@#$%^&*()\-_"=+{}; :,<.>]/,
