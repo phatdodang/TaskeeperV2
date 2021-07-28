@@ -8,21 +8,27 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Keyboard,
-  Alert,
+  Modal,
 } from "react-native";
 import AppStyle from "../../themes/index";
 //@ts-ignore
 import imageHeader from "../../assets/images/logoHeader.png";
 import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import ENTEXT from "../../locales/en";
 import { useDispatch, useSelector } from "react-redux";
+import success from "../../assets/images/success.png";
+import error from "../../assets/images/error.png";
 import * as action from "../../redux/actions/index";
 import { signInInterface } from "../../redux/actions/Authentication/signIn.actionType";
-import { setItem, } from "../../storage/index";
+import { SignUpInterface } from "../../redux/actions/Authentication/signUp.actionType";
+import { setItem } from "../../storage/index";
 import { APP_CONSTANTS } from "../../constansts/index";
+import * as Google from "expo-google-app-auth";
+import * as Facebook from 'expo-facebook';
+import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as yup from "yup";
+import {t} from '../../locales';
 
 interface Props {}
 
@@ -32,21 +38,52 @@ let initialValues = {
 };
 
 const Login = () => {
-  const [showPassword, setshowPassword] = useState(true);
-  const loginSuccess = useSelector((state: any) => state.signInReducer.SigInSuccess);
-  const loginError = useSelector((state: any) => state.signInReducer.SigInError);
+  const navigation = useNavigation();
+  const [showPassword, setShowPassword] = useState(true);
+  const [googleToken,setGoogleToken] = useState("");
+  const [isShowNoticeSuccess, setIsShowNoticeSuccess] = useState(false);
+  const loginSuccess = useSelector(
+    (state: any) => state.signInReducer.SigInSuccess
+  );
+  const loginError = useSelector(
+    (state: any) => state.signInReducer.SigInError
+  );
+  const registerSuccess = useSelector(
+    (state: any) => state.signUpReducer.SignUpSuccess
+  );
+  const registerError = useSelector(
+    (state: any) => state.signUpReducer.SignUpError
+  );
   const dispatch = useDispatch();
   const buttonHandler = () => {
-    setshowPassword((current) => !current);
+    setShowPassword((current) => !current);
   };
   useEffect(() => {
     if (loginSuccess.data.access_token != "") {
       setItem(APP_CONSTANTS.TOKEN, loginSuccess.data.access_token);
       console.log("Login successfully");
-    }else if(loginError.status != 0){
-       console.log(loginError.message);
+    } else if (loginError.status != 0) {
+      console.log(loginError.message);
     }
-  }, [loginSuccess,loginError]);
+    if (registerSuccess.message != "") {
+      setIsShowNoticeSuccess(true);
+    } else if (registerError.status != 0) {
+      setIsShowNoticeSuccess(true);
+    }
+  }, [loginSuccess, loginError,registerError,registerSuccess]);
+  const stackScreenVerify = () =>{
+    if(registerError.status!=0){
+      null;
+    }
+    else {navigation.navigate("Verifycation",{
+      googleToken:googleToken
+    });}
+    if(registerError.status!=0&&registerSuccess.message!=""){
+      navigation.navigate("Verifycation",{
+        googleToken:googleToken
+      });
+    }
+  }
   const [loaded] = useFonts({
     RobotoMonoInput: require("../../assets/fonts/RobotoMono-Regular.ttf"),
     RobotoTitle: require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -56,17 +93,97 @@ const Login = () => {
   if (!loaded) {
     return null;
   }
-  const onSubmit = async (values:any) => {
+  const onSubmit = async (values: any) => {
     let data: signInInterface = {
       loginString: values.email,
       loginInformation: {
-        password:values.password,
+        password: values.password,
         googleToken: "",
         facebookToken: "",
       },
     };
     dispatch(action.signIn(data));
   };
+
+  const signInWithFacebookAsync = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: '185040733638083',
+      });
+      const {
+        type,
+        token,
+      } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        fetch(`https://graph.facebook.com/me?fields=id,first_name,email,last_name,picture.height(500)&access_token=${token}`)
+          .then(response => response.json())
+          .then(data => console.log(JSON.stringify(data)))
+      } else {
+        console.log("eeeeeeeeeee")
+      }
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  const signInWithGoogleAsync = async () => {
+    const allowed = {
+      uppers: "QWERTYUIOPASDFGHJKLZXCVBNM",
+      lowers: "qwertyuiopasdfghjklzxcvbnm",
+      numbers: "1234567890",
+      symbols: "!@#$%^&*",
+    };
+    const getRandomCharFromString = (str: string) =>
+      str.charAt(Math.floor(Math.random() * str.length));
+    let pwd = "";
+    pwd += getRandomCharFromString(allowed.uppers); //pwd will have at least one upper
+    pwd += getRandomCharFromString(allowed.lowers); //pwd will have at least one lower
+    pwd += getRandomCharFromString(allowed.numbers); //pwd will have at least one number
+    pwd += getRandomCharFromString(allowed.symbols); //pwd will have at least one symbolo
+    for (let i = pwd.length; i < 8; i++)
+      pwd += getRandomCharFromString(Object.values(allowed).join("")); //fill the rest of the pwd with random characters
+    try {
+      const result = await Google.logInAsync({
+        androidClientId:
+          "268124184529-djvbkb9rcn1jh8uo8q11t5okg6hs8g80.apps.googleusercontent.com",
+        scopes: ["profile", "email"],
+      });
+      if (result.type === "success") {
+        setGoogleToken(result.accessToken?.toString());
+        const data: SignUpInterface = {
+          firstName: result.user.givenName,
+          lastName: result.user.familyName,
+          email: result.user.email,
+          dayOfBirth: 1,
+          monthOfBirth: 1,
+          yearOfBirth: 1,
+          phoneNumber: {
+            ISD_CodeId: "",
+            phoneNumber: "",
+          },
+          loginInformation: {
+            password: pwd,
+            googleToken: result.accessToken?.toString(),
+            facebookToken: "",
+          },
+          avatar:result.user.photoUrl,
+          gender: "other",
+        };
+        console.log(data);
+        dispatch(action.signUp(data));
+      } else {
+        console.log(result);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  console.log(loginError.message);
+  console.log(loginSuccess.message);
 
   return (
     <KeyboardAvoidingView
@@ -78,6 +195,35 @@ const Login = () => {
         onPress={Keyboard.dismiss}
       >
         <View style={[{ alignItems: "center" }]}>
+        <Modal
+            transparent={true}
+            visible={isShowNoticeSuccess}
+            animationType="slide"
+            style={AppStyle.StyleRegister.positionModalNotice}
+          >
+            <View style={AppStyle.StyleRegister.itemPositionModal}>
+              <View style={AppStyle.StyleRegister.setModal}>
+                <Image
+                  source={registerSuccess.message != "" ? success : error}
+                  style={{ height: 50, width: 50 }}
+                ></Image>
+                <Text>
+                  {registerSuccess.message != ""
+                    ? registerSuccess.message
+                    : registerError.message}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsShowNoticeSuccess(false);
+                    stackScreenVerify;
+                  }}
+                  style={[AppStyle.StyleRegister.styleButtonModal,{backgroundColor: registerSuccess.message != "" ? "green" : "red",}]}
+                >
+                  <Text style={AppStyle.StyleRegister.styleTextButton}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           <View style={AppStyle.StyleLogin.circle1}></View>
           <View style={AppStyle.StyleLogin.circle2}></View>
           <View style={AppStyle.StyleLogin.viewTitle}>
@@ -87,7 +233,7 @@ const Login = () => {
                 { fontFamily: "RobotoMonoInput" },
               ]}
             >
-              {ENTEXT.SIGNIN.TITLE}
+              {t("SIGNIN.TITLE")}
             </Text>
             <Text
               style={[
@@ -95,7 +241,7 @@ const Login = () => {
                 { fontFamily: "RobotoMonoInput" },
               ]}
             >
-              {ENTEXT.SIGNIN.TITLEDESC}
+              {t("SIGNIN.TITLEDESC")}
             </Text>
           </View>
           <View style={AppStyle.StyleLogin.viewImage}>
@@ -134,7 +280,7 @@ const Login = () => {
                           { fontFamily: "RobotoMonoInput" },
                         ]}
                       >
-                        {ENTEXT.SIGNIN.EMAIL}
+                        {t("SIGNIN.EMAIL")}
                       </Text>
                     </View>
                   </View>
@@ -161,7 +307,7 @@ const Login = () => {
                           { fontFamily: "RobotoMonoInput" },
                         ]}
                       >
-                        {ENTEXT.SIGNIN.PASSWORD}
+                        {t("SIGNIN.PASSWORD")}
                       </Text>
                     </View>
                     <TouchableOpacity
@@ -188,7 +334,7 @@ const Login = () => {
                     { fontFamily: "RobotoMonoInput" },
                   ]}
                 >
-                  {ENTEXT.SIGNIN.FORGOT_PASSWORD}
+                  {t("SIGNIN.FORGOT_PASSWORD")}
                 </Text>
                 <TouchableOpacity
                   onPress={handleSubmit}
@@ -200,7 +346,7 @@ const Login = () => {
                       { fontFamily: "RobotoMonoInput" },
                     ]}
                   >
-                    {ENTEXT.SIGNIN.BTN}
+                    {t("SIGNIN.BTN")}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -212,23 +358,25 @@ const Login = () => {
               { fontFamily: "RobotoMonoInput" },
             ]}
           >
-            {ENTEXT.SIGNIN.OPTION}
+            {t("SIGNIN.OPTION")}
           </Text>
           <View style={AppStyle.StyleLogin.viewChooseSignInButton}>
             <TouchableOpacity
               style={AppStyle.StyleLogin.viewChooseSignInButtonFacebook}
+              onPress={signInWithFacebookAsync}
             >
               <FontAwesome name="facebook-f" size={24} color="#ffff" />
             </TouchableOpacity>
             <TouchableOpacity
               style={AppStyle.StyleLogin.viewChooseSignInButtonGoogle}
+              onPress={signInWithGoogleAsync}
             >
               <AntDesign name="google" size={24} color="#ffff" />
             </TouchableOpacity>
           </View>
           <View style={AppStyle.StyleLogin.viewNote}>
             <Text style={{ fontSize: 12, fontFamily: "RobotoMonoCheck" }}>
-              {ENTEXT.SIGNIN.NO_ACCOUNT}
+            {t("SIGNIN.NO_ACCOUNT")}
             </Text>
             <Text
               style={{
@@ -237,7 +385,7 @@ const Login = () => {
                 fontFamily: "RobotoMonoCheck",
               }}
             >
-              {ENTEXT.SIGNIN.BTN_SIGNUP}
+              {t("SIGNIN.BTN_SIGNUP")}
             </Text>
           </View>
         </View>
@@ -254,12 +402,5 @@ const loginValidationSchema = yup.object().shape({
     .required("Email Address is Required"),
   password: yup
     .string()
-    .matches(/\w*[a-z]\w*/, "Password must have a small letter")
-    .matches(/\d/, "Password must have a number")
-    .matches(
-      /[!@#$%^&*()\-_"=+{}; :,<.>]/,
-      "Password must have a special character"
-    )
-    .min(8, ({ min }) => `Password must be at least ${min} characters`)
     .required("Password is required"),
 });

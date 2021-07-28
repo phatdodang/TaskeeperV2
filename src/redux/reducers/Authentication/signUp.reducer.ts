@@ -17,6 +17,7 @@ const initialSignUp: SignUpInterface = {
         googleToken: "",
         facebookToken: ""
     },
+    avatar:"",
     gender: ""
 };
 
@@ -37,6 +38,7 @@ const initialSignUpSuccess: signUpSuccessInterface = {
       ISD_CodeId: "",
       phoneNumber: ""
     },
+    avatar:"",
     gender:"",
     languageCode:"",
     __v:0
@@ -44,33 +46,22 @@ const initialSignUpSuccess: signUpSuccessInterface = {
 }
 const initialSignUpError: signUpErrorInterface = {
   message: "",
-  error:{
-    driver: false,
-    name: "",
-    index: 0,
-    code: 0,
-    keyPattern: {
-        email: 0
-    },
-    keyValue: {
-        email: ""
-    }
-  }
+  status:0
 }
 
 interface allSignUpInterface {
-  signIn: SignUpInterface,
-  SigInSuccess: signUpSuccessInterface,
-  SigInError: signUpErrorInterface
+  signUp: SignUpInterface,
+  SignUpSuccess: signUpSuccessInterface,
+  SignUpError: signUpErrorInterface
 }
 
 const initial: allSignUpInterface = {
-  signIn: initialSignUp,
-  SigInSuccess: initialSignUpSuccess,
-  SigInError: initialSignUpError
+  signUp: initialSignUp,
+  SignUpSuccess: initialSignUpSuccess,
+  SignUpError: initialSignUpError
 };
 
-const signUpReducer = (state : SignUpInterface= initialSignUp, action:ActionSignUp) => {
+const signUpReducer = (state : allSignUpInterface= initial, action:ActionSignUp) => {
     switch (action.type) {
       case ActionSignUpConstants.SIGN_UP: {
         return {
@@ -80,6 +71,13 @@ const signUpReducer = (state : SignUpInterface= initialSignUp, action:ActionSign
       case ActionSignUpConstants.SIGN_UP_SUCCESS: {
         return {
           ...state,
+          SignUpSuccess:action.payload
+        }
+      }
+      case ActionSignUpConstants.SIGN_UP_FAIL: {
+        return {
+          ...state,
+          SignUpError:action.payload
         }
       }
       default: return state;

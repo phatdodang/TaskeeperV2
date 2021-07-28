@@ -49,7 +49,7 @@ const StyleRegister = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
     marginBottom: 30,
-    marginTop:15
+    marginTop: 15,
   },
   input: {
     borderWidth: 1,
@@ -61,16 +61,16 @@ const StyleRegister = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 5,
   },
-  viewBarPasswordStrengthDisplay:{
-    width:(width*8)/10,
-    alignItems:'center',
-    marginTop:5,
+  viewBarPasswordStrengthDisplay: {
+    width: (width * 8) / 10,
+    alignItems: "center",
+    marginTop: 5,
     marginBottom: 10,
   },
-  viewValidation:{
-    width:(width*8)/10,
-    marginTop:5,
-    marginLeft:15
+  viewValidation: {
+    width: (width * 8) / 10,
+    marginTop: 5,
+    marginLeft: 15,
   },
   viewInput: {
     width: width,
@@ -138,9 +138,36 @@ const StyleRegister = StyleSheet.create({
     borderTopRightRadius: 0,
     justifyContent: "center",
   },
-  textShowPhoneCode:{
-    fontSize: 15, 
-    marginTop: 8
-  }
+  textShowPhoneCode: {
+    fontSize: 15,
+    marginTop: 8,
+  },
+  positionModalNotice: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  itemPositionModal: {
+    backgroundColor: "#000000aa",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  setModal: {
+    backgroundColor: "#faf9f9",
+    borderRadius: 20,
+    height: 210,
+    width: "70%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  styleButtonModal: {
+    width: "50%",
+    height: 30,
+    borderRadius: 10,
+    marginTop: 15,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  styleTextButton: { color: "white", fontSize: 15, fontWeight: "bold" },
 });
 export default StyleRegister;

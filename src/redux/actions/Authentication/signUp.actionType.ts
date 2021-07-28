@@ -3,8 +3,8 @@ import {ActionSignUpConstants} from '../../constants/index'
 
 export interface LoginInformationInterface {
    password:String,
-   googleToken:String
-   facebookToken:String,
+   googleToken:String | undefined,
+   facebookToken:String | undefined,
 } 
 
 export interface PhoneNumberInterface {
@@ -13,14 +13,15 @@ export interface PhoneNumberInterface {
  } 
 
 export interface SignUpInterface {
-    firstName:String,
-    lastName:String,
-    email:String,
+    firstName:String | undefined,
+    lastName:String | undefined,
+    email:String | undefined,
     dayOfBirth:Number,
     monthOfBirth:Number,
     yearOfBirth:Number,
     phoneNumber:PhoneNumberInterface,
     loginInformation:LoginInformationInterface,
+    avatar:String | undefined,
     gender:String
 }
 
@@ -36,6 +37,7 @@ export interface UserInformationInterface {
     monthOfBirth:number,
     yearOfBirth:number,
     phoneNumber:PhoneNumberInterface,
+    avatar:String,
     gender:String,
     languageCode:String,
     __v:number
@@ -61,7 +63,7 @@ export interface signUpSuccessInterface {
 
 export interface signUpErrorInterface {
     message: string;
-    error:ErrorInformationInterface
+    status:number;
 }
 
 export interface SignUp {

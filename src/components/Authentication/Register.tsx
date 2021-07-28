@@ -4,7 +4,9 @@ import {
   View,
   TextInput,
   CheckBox,
+  Modal,
   TouchableWithoutFeedback,
+  Image,
   FlatList,
   Keyboard,
   ScrollView,
@@ -16,6 +18,8 @@ import { useFonts } from "expo-font";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { BarPasswordStrengthDisplay } from "react-native-password-strength-meter";
 import { getLanguage, Language } from "../../services/api";
+import success from "../../assets/images/success.png";
+import error from "../../assets/images/error.png";
 import PhoneCode from "../../services/map";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +29,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { SignUpType } from "./types/signUp.Type";
+import { useNavigation } from "@react-navigation/native";
+import App from "../../../App";
 interface Props {}
 
 let initialValues: SignUpType = {
@@ -36,7 +42,14 @@ let initialValues: SignUpType = {
 };
 
 const Register: React.FC<Props> = ({}) => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const registerSuccess = useSelector(
+    (state: any) => state.signUpReducer.SignUpSuccess
+  );
+  const registerError = useSelector(
+    (state: any) => state.signUpReducer.SignUpError
+  );
 
   const [openDay, setOpenDay] = useState(false);
   const [valueDay, setValueDay] = useState(1);
@@ -58,6 +71,7 @@ const Register: React.FC<Props> = ({}) => {
   ]);
   const [gender, setGender] = useState("male");
   const [codeId, setCodeId] = useState("84");
+  const [isShowNoticeSuccess, setIsShowNoticeSuccess] = useState(false);
   const [isSelected, setIsSelection] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(true);
   const [language, setLanguage] = useState<Language[]>([]);
@@ -95,26 +109,46 @@ const Register: React.FC<Props> = ({}) => {
 
   useEffect(() => {
     getDataLanguage();
-  }, []);
+    if (registerSuccess.message != "") {
+      setIsShowNoticeSuccess(true);
+    } else if (registerError.status != 0) {
+      setIsShowNoticeSuccess(true);
+    }
+  }, [registerSuccess, registerError]);
+  const stackScreenVerify = () => {
+    if (registerError.status !== 0 && registerSuccess.message !== "") {
+      navigation.navigate("Verifycation", {
+        googleToken: null,
+      });
+    }
+    if (registerError.status != 0) {
+      null;
+    } else {
+      navigation.navigate("Verifycation", {
+        googleToken: null,
+      });
+    }
+  };
 
-  const onSubmit = (values: object) => {
-    console.log(values);
-    let data: SignUpInterface = {
-      firstName: "phat",
-      lastName: "do",
-      email: "do123@gmail.com",
+  const onSubmit = (values) => {
+    const data: SignUpInterface = {
+      firstName: values.firstname,
+      lastName: values.lastname,
+      email: values.email,
       dayOfBirth: valueDay,
       monthOfBirth: valueMonth,
       yearOfBirth: valueYear,
       phoneNumber: {
         ISD_CodeId: codeId,
-        phoneNumber: "943132324",
+        phoneNumber: values.phonenumber,
       },
       loginInformation: {
-        password: "1234566",
+        password: values.password,
         googleToken: "",
         facebookToken: "",
       },
+      avatar:
+        "https://scontent.fdad1-1.fna.fbcdn.net/v/t1.6435-9/58643479_1268513746647886_5941743867085717504_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=8bfeb9&_nc_ohc=8jVGPIu32h0AX9UGOjZ&_nc_oc=AQmYbVqwYIA0M9Uh0e5jrc-EluKIt1EMSjjOk0G9QGbVIcN66CDIOw6Wy4vltSnZV9OiudBn-E64GOIIYUCnxO1d&tn=xP7DCHtuHFwvDuoK&_nc_ht=scontent.fdad1-1.fna&oh=ec3ef037a4a0a72ad33fe16df0b9adef&oe=61235822",
       gender: gender,
     };
     dispatch(action.signUp(data));
@@ -137,7 +171,6 @@ const Register: React.FC<Props> = ({}) => {
         : items
     );
   }
-
   return (
     <TouchableWithoutFeedback
       style={AppStyle.StyleCommon.container}
@@ -145,6 +178,41 @@ const Register: React.FC<Props> = ({}) => {
     >
       <ScrollView>
         <View style={AppStyle.StyleCommon.container}>
+          <Modal
+            transparent={true}
+            visible={isShowNoticeSuccess}
+            animationType="slide"
+            style={AppStyle.StyleRegister.positionModalNotice}
+          >
+            <View style={AppStyle.StyleRegister.itemPositionModal}>
+              <View style={AppStyle.StyleRegister.setModal}>
+                <Image
+                  source={registerSuccess.message != "" ? success : error}
+                  style={{ height: 50, width: 50 }}
+                ></Image>
+                <Text>
+                  {registerSuccess.message != ""
+                    ? registerSuccess.message
+                    : registerError.message}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsShowNoticeSuccess(false);
+                    stackScreenVerify();
+                  }}
+                  style={[
+                    AppStyle.StyleRegister.styleButtonModal,
+                    {
+                      backgroundColor:
+                        registerSuccess.message != "" ? "green" : "red",
+                    },
+                  ]}
+                >
+                  <Text style={AppStyle.StyleRegister.styleTextButton}>Ok</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
           <View style={{ height: 200 }}>
             <View style={AppStyle.StyleRegister.circle1}></View>
             <View style={AppStyle.StyleRegister.circle2}></View>
