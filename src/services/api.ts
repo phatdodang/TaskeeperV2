@@ -22,7 +22,7 @@ export const loginUser = (payload:signInInterface) => {
 };
 
 export const RegisterUser = (payload:SignUpInterface) => {
-    return  axios.post(`${URL}/users/create`,payload);
+    return  axios.post(`${URL}/users/create`,payload)
 };
 
 export const getLaco = () => {

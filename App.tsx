@@ -9,6 +9,7 @@ import reducers from "./src/redux/reducers/index";
 
 import Login from "./src/components/Authentication/Login";
 import Register from "./src/components/Authentication/Register";
+import Verifycation from "./src/components/Authentication/Verifycation";
 import LandingPage from "./src/components/Authentication/LandingPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -22,7 +23,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer >
         <Stack.Navigator>
           {/* <Stack.Screen
             name="LandingPage"
@@ -39,9 +40,17 @@ export default function App() {
             component={Register}
             options={{ headerShown: false }}
           /> 
+          <Stack.Screen
+            name="Verifycation"
+            component={Verifycation}
+            options={{ headerShown: false }}
+          /> 
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
+    // <View style={{flex:1,alignItems:"center",justifyContent:'center'}}>
+    // <Text>{t('hello')}</Text>
+    // </View>
   );
 }
 
