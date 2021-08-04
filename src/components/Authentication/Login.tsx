@@ -24,11 +24,11 @@ import { SignUpInterface } from "../../redux/actions/Authentication/signUp.actio
 import { setItem } from "../../storage/index";
 import { APP_CONSTANTS } from "../../constansts/index";
 import * as Google from "expo-google-app-auth";
-import * as Facebook from 'expo-facebook';
+import * as Facebook from "expo-facebook";
 import { useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as yup from "yup";
-import {t} from '../../locales';
+import { t } from "../../locales";
 
 interface Props {}
 
@@ -40,7 +40,7 @@ let initialValues = {
 const Login = () => {
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(true);
-  const [googleToken,setGoogleToken] = useState("");
+  const [googleToken, setGoogleToken] = useState("");
   const [isShowNoticeSuccess, setIsShowNoticeSuccess] = useState(false);
   const loginSuccess = useSelector(
     (state: any) => state.signInReducer.SigInSuccess
@@ -70,20 +70,21 @@ const Login = () => {
     } else if (registerError.status != 0) {
       setIsShowNoticeSuccess(true);
     }
-  }, [loginSuccess, loginError,registerError,registerSuccess]);
-  const stackScreenVerify = () =>{
-    if(registerError.status!=0){
+  }, [loginSuccess, loginError, registerError, registerSuccess]);
+  const stackScreenVerify = () => {
+    if (registerError.status != 0) {
       null;
-    }
-    else {navigation.navigate("Verifycation",{
-      googleToken:googleToken
-    });}
-    if(registerError.status!=0&&registerSuccess.message!=""){
-      navigation.navigate("Verifycation",{
-        googleToken:googleToken
+    } else {
+      navigation.navigate("Verifycation", {
+        googleToken: googleToken,
       });
     }
-  }
+    if (registerError.status != 0 && registerSuccess.message != "") {
+      navigation.navigate("Verifycation", {
+        googleToken: googleToken,
+      });
+    }
+  };
   const [loaded] = useFonts({
     RobotoMonoInput: require("../../assets/fonts/RobotoMono-Regular.ttf"),
     RobotoTitle: require("../../assets/fonts/Roboto-Medium.ttf"),
@@ -108,26 +109,25 @@ const Login = () => {
   const signInWithFacebookAsync = async () => {
     try {
       await Facebook.initializeAsync({
-        appId: '185040733638083',
+        appId: "4204477899619870",
       });
-      const {
-        type,
-        token,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile'],
+      const { type, token } = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ["public_profile", "email"],
       });
-      if (type === 'success') {
+      if (type === "success") {
         // Get the user's name using Facebook's Graph API
-        fetch(`https://graph.facebook.com/me?fields=id,first_name,email,last_name,picture.height(500)&access_token=${token}`)
-          .then(response => response.json())
-          .then(data => console.log(JSON.stringify(data)))
+        fetch(
+          `https://graph.facebook.com/me?fields=id,first_name,email,last_name,picture.height(500)&access_token=${token}`
+        )
+          .then((response) => response.json())
+          .then((data) => console.log(JSON.stringify(data)));
       } else {
-        console.log("eeeeeeeeeee")
+        console.log("eeeeeeeeeee");
       }
     } catch (e) {
-      alert(e);
+      console.log(e);
     }
-  }
+  };
 
   const signInWithGoogleAsync = async () => {
     const allowed = {
@@ -169,7 +169,7 @@ const Login = () => {
             googleToken: result.accessToken?.toString(),
             facebookToken: "",
           },
-          avatar:result.user.photoUrl,
+          avatar: result.user.photoUrl,
           gender: "other",
         };
         console.log(data);
@@ -195,7 +195,7 @@ const Login = () => {
         onPress={Keyboard.dismiss}
       >
         <View style={[{ alignItems: "center" }]}>
-        <Modal
+          <Modal
             transparent={true}
             visible={isShowNoticeSuccess}
             animationType="slide"
@@ -217,7 +217,13 @@ const Login = () => {
                     setIsShowNoticeSuccess(false);
                     stackScreenVerify;
                   }}
-                  style={[AppStyle.StyleRegister.styleButtonModal,{backgroundColor: registerSuccess.message != "" ? "green" : "red",}]}
+                  style={[
+                    AppStyle.StyleRegister.styleButtonModal,
+                    {
+                      backgroundColor:
+                        registerSuccess.message != "" ? "green" : "red",
+                    },
+                  ]}
                 >
                   <Text style={AppStyle.StyleRegister.styleTextButton}>Ok</Text>
                 </TouchableOpacity>
@@ -376,7 +382,7 @@ const Login = () => {
           </View>
           <View style={AppStyle.StyleLogin.viewNote}>
             <Text style={{ fontSize: 12, fontFamily: "RobotoMonoCheck" }}>
-            {t("SIGNIN.NO_ACCOUNT")}
+              {t("SIGNIN.NO_ACCOUNT")}
             </Text>
             <Text
               style={{
@@ -400,7 +406,5 @@ const loginValidationSchema = yup.object().shape({
     .string()
     .email("Please enter valid email")
     .required("Email Address is Required"),
-  password: yup
-    .string()
-    .required("Password is required"),
+  password: yup.string().required("Password is required"),
 });
